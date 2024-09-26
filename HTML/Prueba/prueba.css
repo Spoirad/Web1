@@ -1,0 +1,27 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+
+}
+
+h1{
+    color: aqua;
+    text-align: center;
+}
+
+p{
+    color: darkgray;
+    margin: 15px;
+}
+
+ul{
+    border: 2px dotted black;
+}
+
+#destacado{
+    background-color: yellow;
+}
+
+.importante{
+    font-weight: bold;
+}
