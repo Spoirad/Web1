@@ -15,7 +15,7 @@ const Formulario = ({ selectedPet, submitApplication }) => {
             <h3>Formulario de Adopción</h3>
             {selectedPet ? (
                 <>
-                    <p>Adoptando a: {selectedPet.name}</p>
+                    <p>Adoptando a: {selectedPet.nombre}</p>
                     <form onSubmit={handleSubmit}>
                         <label>
                             Nombre Completo:

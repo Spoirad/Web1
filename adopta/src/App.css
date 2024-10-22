@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -36,17 +37,56 @@
     transform: rotate(360deg);
   }
 }
-.petCard {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  width: 200px; /* Tamaño fijo para las tarjetas */
-  text-align: center;
+
+/* Estilos generales para la lista */
+.pets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+  gap: 16px; /* Espaciado entre fichas */
+  list-style: none; /* Quitar bullets de la lista */
+  padding: 0;
+  margin: 16px 0;
 }
 
-.petCard img {
-  width: 100px; /* Ancho máximo de las imágenes */
-  height: 100px; /* Alto máximo de las imágenes */
-  object-fit: cover; /* Para que las imágenes se ajusten al espacio */
-  border-radius: 8px; /* Esquinas redondeadas */
+/* Estilos para cada tarjeta de mascota */
+.petCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  background-color: #f9f9f9; /* Fondo claro */
+}
+
+.petCard:hover {
+  transform: scale(1.05); /* Efecto de hover */
+}
+
+/* Estilo para las imágenes */
+.petImage {
+  width: 100%; /* Ocupar todo el ancho del contenedor */
+  height: 300px; /* Altura fija para todas las imágenes */
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  border-radius: 8px;
+}
+
+/* Encabezado */
+h4 {
+  margin: 10px 0;
+  font-size: 1.2rem;
+}
+
+/* Botón */
+button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
 }

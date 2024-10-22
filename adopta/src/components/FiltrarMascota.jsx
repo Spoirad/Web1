@@ -3,11 +3,10 @@ import React, { useState } from 'react';
 
 const FiltrarMascota = ({ updateFilters }) => {
     const [tipo, setType] = useState('');
-    const [edad, setAge] = useState('');
     const [genero, setGender] = useState('');
 
     const handleFilterChange = () => {
-        updateFilters({ tipo, edad, genero });
+        updateFilters({ tipo, genero });
     };
 
     return (
@@ -19,14 +18,7 @@ const FiltrarMascota = ({ updateFilters }) => {
                     <option value="">Todos</option>
                     <option value="Perro">Perro</option>
                     <option value="Gato">Gato</option>
-                </select>
-            </label>
-            <label>
-                Edad:
-                <select value={edad} onChange={e => setAge(e.target.value)}>
-                    <option value="">Todas</option>
-                    <option value="joven">Joven</option>
-                    <option value="adulto">Adulto</option>
+                    <option value="Conejo">Conejo</option>
                 </select>
             </label>
             <label>
