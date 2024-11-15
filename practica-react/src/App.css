@@ -1,0 +1,209 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Estilos generales */
+.app-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 1200px; /* Limita el ancho */
+  margin: 0 auto;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la lista de cómics */
+.comic-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Crea 4 columnas */
+  gap: 20px; /* Espacio entre los cómics */
+  justify-items: center; /* Centra los elementos dentro de la grilla */
+  padding: 0;
+}
+
+.comic-card {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 15px;
+  width: 100%; /* Asegura que las tarjetas ocupen todo el espacio disponible */
+  max-width: 220px; /* Limita el ancho máximo */
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para las tarjetas */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comic-card:hover {
+  transform: translateY(-10px); /* Efecto de elevación al pasar el ratón */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Aumenta la sombra al hacer hover */
+}
+
+.comic-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.comic-card h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Estilos para los botones dentro de las tarjetas */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Estilos para la lista de favoritos */
+.favorites-list {
+  margin-top: 40px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.favorites-list h2 {
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.favorites-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.favorites-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.favorites-list li:hover {
+  background-color: #e6f7ff;
+}
+
+.favorites-item-details {
+  display: flex;
+  align-items: center;
+}
+
+.favorites-item-details img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.favorites-item-title {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Botón de eliminar */
+.favorites-list button {
+  padding: 6px 12px;
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.favorites-list button:hover {
+  background-color: #e63939;
+}
+
+.favorites-list button:focus {
+  outline: none;
+}
+/* Estilo de la pantalla cuando hay menos de 4 columnas */
+@media (max-width: 1200px) {
+  .comic-list {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas más pequeñas */
+  }
+}
+
+@media (max-width: 900px) {
+  .comic-list {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas medianas */
+  }
+}
+
+@media (max-width: 600px) {
+  .comic-list {
+    grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
+  }
+}
