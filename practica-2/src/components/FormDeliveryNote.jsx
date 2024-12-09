@@ -2,27 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEditingNote, clients = [], projects = [] }) => {
-    console.log("Clients passed to FormDeliveryNote:", clients);
-    const [deliveryNote, setDeliveryNote] = useState({
-        clientId: '',
-        projectId: '',
-        format: 'material',
-        material: '',
-        hours: 0,
-        description: '',
-        workdate: '',
-    });
-
-    useEffect(() => {
-        if (editingNote) {
-            setDeliveryNote(editingNote);
-        }
-    }, [editingNote]);
-
-    const handleFormChange = (e) => {
-        const { name, value } = e.target;
-        setDeliveryNote((prev) => ({ ...prev, [name]: value }));
-    };
+    const [clientId, setClientId] = useState(editingNote ? editingNote.clientId : '');
+    const [projectId, setProjectId] = useState(editingNote ? editingNote.projectId : '');
+    const [format, setFormat] = useState(editingNote ? editingNote.format : 'material');
+    const [material, setMaterial] = useState(editingNote ? editingNote.material : '');
+    const [hours, setHours] = useState(editingNote ? editingNote.hours : 0);
+    const [description, setDescription] = useState(editingNote ? editingNote.description : '');
+    const [workdate, setWorkdate] = useState(editingNote ? editingNote.workdate : '');
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -34,7 +20,17 @@ const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEd
                 : 'https://bildy-rpmaya.koyeb.app/api/deliverynote';
             const method = editingNote ? 'put' : 'post';
 
-            axios[method](apiUrl, deliveryNote, {
+            const deliveryNoteData = {
+                clientId,
+                projectId,
+                format,
+                material,
+                hours,
+                description,
+                workdate,
+            };
+
+            axios[method](apiUrl, deliveryNoteData, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
@@ -50,16 +46,7 @@ const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEd
                     }
                     setFormVisible(false);
                     setEditingNote(null);
-                    setDeliveryNote({
-                        clientId: '',
-                        projectId: '',
-                        format: 'material',
-                        material: '',
-                        hours: 0,
-                        description: '',
-                        workdate: '',
-                        
-                    });
+                    resetForm();
                 })
                 .catch((error) => {
                     console.error('Error submitting delivery note:', error);
@@ -68,14 +55,24 @@ const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEd
             console.error('Token not found. Please log in.');
         }
     };
+
+    const resetForm = () => {
+        setClientId('');
+        setProjectId('');
+        setFormat('material');
+        setMaterial('');
+        setHours(0);
+        setDescription('');
+        setWorkdate('');
+    };
+
     return (
-        <form onSubmit={handleFormSubmit} className="p-4 border border-gray-900 rounded-lg shadow-sm">
+        <form onSubmit={handleFormSubmit} className="p-4 border border-gray-900 rounded-lg shadow-sm bg-white">
             <label className="block mb-2 font-semibold">Cliente:</label>
             <select
-                name="clientId"
-                value={deliveryNote.clientId}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={clientId}
+                onChange={(e) => setClientId(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             >
                 <option value="">Seleccione un cliente</option>
                 {Array.isArray(clients) && clients.map((client) => (
@@ -85,10 +82,9 @@ const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEd
 
             <label className="block mb-2 font-semibold">Proyecto:</label>
             <select
-                name="projectId"
-                value={deliveryNote.projectId}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={projectId}
+                onChange={(e) => setProjectId(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             >
                 <option value="">Seleccione un proyecto</option>
                 {Array.isArray(projects) && projects.map((project) => (
@@ -98,10 +94,9 @@ const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEd
 
             <label className="block mb-2 font-semibold">Formato:</label>
             <select
-                name="format"
-                value={deliveryNote.format}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={format}
+                onChange={(e) => setFormat(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             >
                 <option value="material">Material</option>
                 <option value="hours">Horas</option>
@@ -110,36 +105,32 @@ const FormDeliveryNote = ({ setDeliveryNotes, setFormVisible, editingNote, setEd
             <label className="block mb-2 font-semibold">Material:</label>
             <input
                 type="text"
-                name="material"
-                value={deliveryNote.material}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={material}
+                onChange={(e) => setMaterial(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             />
 
             <label className="block mb-2 font-semibold">Horas:</label>
             <input
                 type="number"
-                name="hours"
-                value={deliveryNote.hours}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             />
 
             <label className="block mb-2 font-semibold">Descripción:</label>
             <textarea
-                name="description"
-                value={deliveryNote.description}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             ></textarea>
 
             <label className="block mb-2 font-semibold">Fecha de trabajo:</label>
             <input
                 type="date"
-                name="workdate"
-                value={deliveryNote.workdate}
-                onChange={handleFormChange}
-                className="w-full p-2 border rounded-md mb-4 bg-gray-700"
+                value={workdate}
+                onChange={(e) => setWorkdate(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 bg-gray-200"
             />
 
             <button type="submit" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700">
