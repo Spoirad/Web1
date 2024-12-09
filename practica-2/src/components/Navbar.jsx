@@ -14,17 +14,14 @@ const Navbar = () => {
     const handleLogout = () => {
         localStorage.removeItem('jwt');
         setIsAuthenticated(false);
+        window.location.href = '/login';
     };
 
     return (
         <nav className="bg-primary text-white p-4 shadow-md sticky top-0 z-50">
             <div className="container mx-auto flex justify-between items-center">
                 <h1 className="text-xl font-bold">Gestión de Albaranes</h1>
-                <div className="space-x-4">
-                    <Link href="/" className="hover:text-gray-300">Inicio</Link>
-                    <Link href="/client" className="hover:text-gray-300">Clientes</Link>
-                    <Link href="/projects" className="hover:text-gray-300">Proyectos</Link>
-                    <Link href="/deliverynotes" className="hover:text-gray-300">Albaranes</Link>
+                <div className="flex items-center space-x-4">
                     {isAuthenticated ? (
                         <button onClick={handleLogout} className="hover:text-gray-300">Cerrar Sesión</button>
                     ) : (

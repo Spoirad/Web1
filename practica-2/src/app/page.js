@@ -1,10 +1,58 @@
-"use client";
+'use client'
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
 
 export default function Home() {
+  const [stats, setStats] = useState({
+    totalClients: 0,
+    totalProjects: 0,
+    totalDeliveryNotes: 0,
+    recentUpdates: []
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      console.error('No se encontró el token. Por favor, inicie sesión.');
+      return;
+    }
+
+    const fetchStats = async () => {
+      try {
+        const [clientsResponse, projectsResponse, deliveryNotesResponse] = await Promise.all([
+          axios.get('https://bildy-rpmaya.koyeb.app/api/client', {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          axios.get('https://bildy-rpmaya.koyeb.app/api/project', {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          axios.get('https://bildy-rpmaya.koyeb.app/api/deliverynote', {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+        ]);
+
+        setStats({
+          totalClients: clientsResponse.data.length,
+          totalProjects: projectsResponse.data.length,
+          totalDeliveryNotes: deliveryNotesResponse.data.length,
+          recentUpdates: [
+            { message: `Último cliente agregado: ${clientsResponse.data[0]?.name || 'N/A'}`, date: clientsResponse.data[0]?.createdAt || 'N/A' },
+            { message: `Último proyecto agregado: ${projectsResponse.data[0]?.name || 'N/A'}`, date: projectsResponse.data[0]?.createdAt || 'N/A' },
+            { message: `Último albarán registrado: ${deliveryNotesResponse.data[0]?._id || 'N/A'}`, date: deliveryNotesResponse.data[0]?.createdAt || 'N/A' }
+          ]
+        });
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <div className="flex min-h-screen">
       <Sidebar className="bg-gray-800 text-white w-64 hidden md:block" />
@@ -17,14 +65,35 @@ export default function Home() {
             <div className="p-6 bg-white shadow rounded-lg">
               <h3 className="text-xl font-bold text-gray-800 mb-2">Gestión de Clientes</h3>
               <p className="text-gray-600">Cree, edite y administre su cartera de clientes.</p>
+              <p className="text-sm text-gray-500 mt-2">Total clientes registrados: <span className="font-bold">{stats.totalClients}</span></p>
             </div>
             <div className="p-6 bg-white shadow rounded-lg">
               <h3 className="text-xl font-bold text-gray-800 mb-2">Gestión de Proyectos</h3>
               <p className="text-gray-600">Administre proyectos relacionados con sus clientes.</p>
+              <p className="text-sm text-gray-500 mt-2">Proyectos activos: <span className="font-bold">{stats.totalProjects}</span></p>
             </div>
             <div className="p-6 bg-white shadow rounded-lg">
               <h3 className="text-xl font-bold text-gray-800 mb-2">Digitalización de Albaranes</h3>
               <p className="text-gray-600">Digitalice y controle los albaranes de forma eficiente.</p>
+              <p className="text-sm text-gray-500 mt-2">Albaranes procesados: <span className="font-bold">{stats.totalDeliveryNotes}</span></p>
+            </div>
+          </div>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 bg-white shadow rounded-lg">
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Estadísticas Generales</h3>
+              <ul className="text-gray-600 list-disc list-inside">
+                <li>Total clientes: <span className="font-bold">{stats.totalClients}</span></li>
+                <li>Total proyectos: <span className="font-bold">{stats.totalProjects}</span></li>
+                <li>Albaranes registrados: <span className="font-bold">{stats.totalDeliveryNotes}</span></li>
+              </ul>
+            </div>
+            <div className="p-6 bg-white shadow rounded-lg">
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Últimas Actualizaciones</h3>
+              <ul className="text-gray-600 list-disc list-inside">
+                {stats.recentUpdates.map((update, index) => (
+                  <li key={index}>{update.message} - <span className="text-sm text-gray-500">{new Date(update.date).toLocaleDateString()}</span></li>
+                ))}
+              </ul>
             </div>
           </div>
         </main>
@@ -33,35 +102,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-// Explicación del funcionamiento de la API
-// La aplicación utiliza una API REST que se encuentra en https://bildy-rpmaya.koyeb.app.
-// La API tiene los siguientes endpoints principales:
-
-// 1. /api/client
-//    - Método GET: Obtiene una lista de todos los clientes.
-//    - Método POST: Crea un nuevo cliente. Debe enviarse un objeto JSON con los datos del cliente (por ejemplo, el nombre).
-
-// 2. /api/client/{clientId}
-//    - Método GET: Obtiene los detalles de un cliente específico, utilizando el ID del cliente como parámetro.
-
-// 3. /api/project
-//    - Método GET: Obtiene una lista de todos los proyectos.
-//    - Método POST: Crea un nuevo proyecto. Debe enviarse un objeto JSON con los datos del proyecto (por ejemplo, el nombre y el ID del cliente asociado).
-
-// 4. /api/project/{projectId}
-//    - Método GET: Obtiene los detalles de un proyecto específico, utilizando el ID del proyecto como parámetro.
-
-// 5. /api/deliverynote
-//    - Método GET: Obtiene una lista de todos los albaranes.
-//    - Método POST: Crea un nuevo albarán. Debe enviarse un objeto JSON con los datos del albarán.
-
-// 6. /api/deliverynote/{noteId}
-//    - Método GET: Obtiene los detalles de un albarán específico, utilizando el ID del albarán como parámetro.
-
-// 7. /api/deliverynote/pdf/{noteId}
-//    - Método GET: Descarga un albarán en formato PDF, utilizando el ID del albarán como parámetro.
-
-// La API utiliza tokens de autenticación JWT que se obtienen durante el registro o el inicio de sesión del usuario.
-// Estos tokens se deben enviar en las cabeceras de las solicitudes como 'Authorization: Bearer {token}' para acceder a los recursos protegidos.

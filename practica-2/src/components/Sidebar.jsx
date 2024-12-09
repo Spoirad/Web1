@@ -1,17 +1,34 @@
+import { useState } from 'react';
 import Link from 'next/link';
 
 const Sidebar = () => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     return (
-        <aside className="w-64 bg-black p-6 shadow-md h-screen sticky top-0">
-            <nav>
-                <ul className="space-y-4">
-                    <li><Link href="/" className="text-primary hover:underline">Inicio</Link></li>
-                    <li><Link href="/client" className="text-primary hover:underline">Clientes</Link></li>
-                    <li><Link href="/projects" className="text-primary hover:underline">Proyectos</Link></li>
-                    <li><Link href="/deliverynotes" className="text-primary hover:underline">Albaranes</Link></li>
-                </ul>
-            </nav>
-        </aside>
+        <div className="flex">
+            <div
+                onClick={toggleSidebar}
+                className={`fixed top-4 ${isSidebarOpen ? 'left-64' : 'left-4'} z-50 text-white cursor-pointer text-xl p-2 rounded-full shadow-md ${isSidebarOpen ? 'hover:bg-red-600' : 'hover:bg-blue-600'} bg-gray-800 border border-white transition-all duration-300 flex items-center justify-center`}
+            >
+                <span>{isSidebarOpen ? '✖' : '☰'}</span>
+            </div>
+            <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-800 text-white min-h-screen ${isSidebarOpen ? 'p-4' : 'p-0'} overflow-hidden`}>
+                {isSidebarOpen && (
+                    <div className="relative">
+                        <Link href="/" className="block py-2 px-4 hover:bg-gray-700 rounded">Inicio</Link>
+                        <Link href="/client" className="block py-2 px-4 hover:bg-gray-700 rounded">Clientes</Link>
+                        <Link href="/projects" className="block py-2 px-4 hover:bg-gray-700 rounded">Proyectos</Link>
+                        <Link href="/deliverynotes" className="block py-2 px-4 hover:bg-gray-700 rounded">Albaranes</Link>
+                    </div>
+                )}
+            </div>
+            <div className="flex-1 p-8">
+            </div>
+        </div>
     );
 };
 

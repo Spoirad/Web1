@@ -5,6 +5,7 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import FormDeliveryNote from "../../components/FormDeliveryNote";
+import DownloadDeliveryNote from "../../components/DownloadDeliveryNote";
 
 export default function DeliveryNotes() {
     const [deliveryNotes, setDeliveryNotes] = useState([]);
@@ -116,29 +117,32 @@ export default function DeliveryNotes() {
                         />
                     )}
                     {deliveryNotes.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {deliveryNotes.map((note) => (
-                                <div key={note._id} className="p-4 bg-white shadow rounded-lg">
-                                    <h3 className="text-lg font-bold">{note.description || "Sin descripción"}</h3>
-                                    <p><strong>Cliente:</strong> {clients.find(c => c._id === note.clientId)?.name || "N/A"}</p>
-                                    <p><strong>Proyecto:</strong> {projects.find(p => p._id === note.projectId)?.name || "N/A"}</p>
-                                    <p><strong>Formato:</strong> {note.format || "N/A"}</p>
-                                    <p><strong>Fecha:</strong> {note.workdate || "N/A"}</p>
-                                    <p><strong>Horas:</strong> {note.hours?.toString() || 0}</p>
-                                    <p><strong>Material:</strong> {note.material || "N/A"}</p>
-                                    <div className="mt-4">
+                                <div key={note._id} className="p-6 bg-white shadow-md rounded-lg border border-gray-300">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-2">{note.description || "Sin descripción"}</h3>
+                                    <p className="text-sm text-gray-600"><strong>Cliente:</strong> {clients.find(c => c._id === note.clientId)?.name || "N/A"}</p>
+                                    <p className="text-sm text-gray-600"><strong>Proyecto:</strong> {projects.find(p => p._id === note.projectId)?.name || "N/A"}</p>
+                                    <p className="text-sm text-gray-600"><strong>Formato:</strong> {note.format || "N/A"}</p>
+                                    <p className="text-sm text-gray-600"><strong>Fecha:</strong> {note.workdate || "N/A"}</p>
+                                    <p className="text-sm text-gray-600"><strong>Horas:</strong> {note.hours?.toString() || 0}</p>
+                                    <p className="text-sm text-gray-600"><strong>Material:</strong> {note.material || "N/A"}</p>
+                                    <div className="mt-4 flex flex-col gap-2">
                                         <button
-                                            className="bg-yellow-500 text-white py-1 px-2 rounded-md hover:bg-yellow-700 mr-2"
+                                            className="bg-yellow-500 text-white py-1 px-3 rounded-md hover:bg-yellow-600"
                                             onClick={() => handleEditNote(note)}
                                         >
                                             Editar
                                         </button>
                                         <button
-                                            className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-700"
+                                            className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600"
                                             onClick={() => handleDeleteNote(note._id)}
                                         >
                                             Eliminar
                                         </button>
+                                        <div className="mt-2">
+                                            <DownloadDeliveryNote deliveryNoteId={note._id} />
+                                        </div>
                                     </div>
                                 </div>
                             ))}
